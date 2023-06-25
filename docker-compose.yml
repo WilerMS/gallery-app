@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  server:
+    container_name: server-gallery-app-mongo-flask
+    restart: always
+    image: server-gallery-app-mongo-flask:1.0.0
+    build:
+      context: server
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    environment:
+      - FLASK_ENV=development
+    volumes:
+      - "./server:/app"
+    links:
+      - mongo
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo-gallery-app-mongo-flask
+    restart: always
+    image: mongo
+    ports:
+      - 27017:27017
