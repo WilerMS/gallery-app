@@ -1,6 +1,23 @@
 version: "3.8"
 
 services:
+  client:
+    container_name: client-gallery-app-mongo-flask
+    restart: always
+    image: client-gallery-app-mongo-flask:1.0.0
+    build:
+      context: client
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_SERVER_HOST=0.0.0.0:5000
+    volumes:
+      - "./client:/app"
+    links:
+      - server
+    depends_on:
+      - server
   server:
     container_name: server-gallery-app-mongo-flask
     restart: always
