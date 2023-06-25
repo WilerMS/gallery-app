@@ -30,13 +30,13 @@ Follow the steps below to launch the application:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/image-gallery.git
+   git clone https://github.com/WilerMS/gallery-app.git
    ```
 
 2. Navigate to the project's directory:
 
    ```bash
-   cd image-gallery
+   cd gallery-app
    ```
 
 3. Set the required environment variables. Edit the `.env` file and replace the placeholders with your own values:
