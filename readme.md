@@ -1,5 +1,7 @@
-markdown
 # Image Gallery Application
+
+![image](https://github.com/WilerMS/gallery-app/assets/70902862/5ec948c0-56a9-4217-b352-1bbead58fb4c)
+
 
 [![Svelte](https://img.shields.io/badge/Frontend-Svelte-blueviolet)](https://svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/Frontend-TypeScript-blue)](https://www.typescriptlang.org/)
