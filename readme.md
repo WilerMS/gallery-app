@@ -1,5 +1,7 @@
-markdown
 # Image Gallery Application
+
+![image](https://github.com/WilerMS/gallery-app/assets/70902862/5ec948c0-56a9-4217-b352-1bbead58fb4c)
+
 
 [![Svelte](https://img.shields.io/badge/Frontend-Svelte-blueviolet)](https://svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/Frontend-TypeScript-blue)](https://www.typescriptlang.org/)
@@ -30,13 +32,13 @@ Follow the steps below to launch the application:
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/your-username/image-gallery.git
+   git clone https://github.com/WilerMS/gallery-app.git
    ```
 
 2. Navigate to the project's directory:
 
    ```bash
-   cd image-gallery
+   cd gallery-app
    ```
 
 3. Set the required environment variables. Edit the `.env` file and replace the placeholders with your own values:
