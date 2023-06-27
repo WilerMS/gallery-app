@@ -1,3 +1,5 @@
 flask
 redis
 flask-cors
+flask_pymongo
+flask_restful
