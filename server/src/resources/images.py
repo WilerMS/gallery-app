@@ -3,7 +3,7 @@ from flask_restful import Resource
 from bson import json_util
 from services.images import ImagesService
 
-class Images(Resource):
+class ImagesController(Resource):
   def get(self, image_param=None):
     images = None
     if image_param:
