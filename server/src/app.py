@@ -7,4 +7,9 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
-api.add_resource(ImagesController, '/images', '/images/<string:image_param>')
+api.add_resource(
+  ImagesController,
+  '/images',
+  '/images/<string:param>',
+  '/images/<string:param>/<string:action>'
+)
