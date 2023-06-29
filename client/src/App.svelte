@@ -4,8 +4,15 @@
   const get = async () => {
 
     const API_URL = import.meta.env.VITE_SERVER_HOST
-    const Url = new URL(`http://${API_URL}`)
-    const res = await fetch(Url)
+    const Url = new URL(`http://${API_URL}/images`)
+    
+    Url.searchParams.append('user', 'wiler')
+
+    const res = await fetch(Url, {
+      headers:  {
+        'Content-type': 'application/json'
+      }
+    })
     const data = await res.text()
 
     console.log({ data })
@@ -16,4 +23,4 @@
 
 </script>
 
-<h1>Response from server: {texto}</h1>
+<h1>{texto}</h1>
