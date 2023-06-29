@@ -1,83 +1,37 @@
 from flask import request, Response, jsonify
 from flask_restful import Resource, abort
 from bson import json_util
-from services.images import ImagesService
-from utils.json import get_json_property
+from services.users import UsersService
+from utils.json import get_json_property, parse_cursor_to_json
 
 class UsersController(Resource):
 
-  ### [GET] method
-  def get(self, param=None):
+  ### [get] method
+  def get(self, username):
 
-    images = None
-    user = get_json_property(request.json, 'user')
-    
-    if param:
-      images = ImagesService.get_images_by_label(param, user)
-    else:
-      images = ImagesService.get_images(user)
+    if not username:
+      abort(400, message="Invalid username", error=True)
 
-    response = json_util.dumps(images)
+    user = UsersService.get_user(username)
 
-    return Response(response, mimetype='application/json')
+    if not user:
+      abort(400, message="Invalid username", error=True)
+
+    user_to_send = parse_cursor_to_json(user)
+
+    return  Response(json_util.dumps(user_to_send), mimetype='application/json')
 
   ### [POST] method
-  def post(self, param=None, action=None):
+  def post(self):
 
-    user = get_json_property(request.json, 'user')
+    username = get_json_property(request.json, 'username')
 
-    if not user:
-      abort(400, message="Invalid user id")
+    if not username:
+      abort(400, message="Invalid username", error=True)
 
-    if param and action == 'like':
-      inserted = ImagesService.like_image(param)
+    inserted = UsersService.add_user(username)
 
-      if not inserted:
-        abort(400, message="Something went wrong", error=True)
-      
-      ### Add image to likes in UserService
-
-    elif param and action == 'unlike':
-      inserted = ImagesService.unlike_image(param)
-
-      if not inserted:
-        abort(400, message="Something went wrong", error=True)
-      
-      ### Delete image to likes in UserService
-
-    else:
-      inserted_id = ImagesService.create_image(request.json)
-
-      if not inserted_id:
-        abort(400, message="Something went wrong", error=True)
+    if not inserted:
+      abort(400, message="Invalid username", error=True)
 
     return jsonify({ 'error': False, 'message': 'Success' })
-
-  ### [PUT] method
-  def put(self, param):
-    user = get_json_property(request.json, 'user')
-
-    if not user:
-      abort(400, message="Invalid user id")
-    
-    upserted = ImagesService.update_image(param, request.json)
-
-    if not upserted:
-        abort(400, message="Something went wrong", error=True)
-
-    return jsonify({ 'error': False, 'message': 'Success' })
-
-  ### [DELETE] method
-  def delete(self, param):
-
-    user = get_json_property(request.json, 'user')
-
-    if not user:
-      abort(400, message="Invalid user id")
-
-    res = ImagesService.delete_image(param, user)
-
-    if not res:
-      abort(404, message="Something went wrong", error=True)
-
-    return jsonify({ 'message': 'Success', 'error': False })

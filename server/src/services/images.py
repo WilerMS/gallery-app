@@ -7,9 +7,9 @@ class ImagesService:
   @staticmethod
   def get_images(user=None):
     if user:
-      return mongo.db.images.find({ 'user': user })
+      return mongo.db.images.find({ 'user': user }, { 'user': 0})
     else:
-      return mongo.db.images.find()
+      return mongo.db.images.find({}, { 'user': 0} )
 
   @staticmethod
   def get_images_by_label(image_label: str, user=None):
@@ -23,7 +23,7 @@ class ImagesService:
     if user:
       dict['user'] = user
 
-    image = mongo.db.images.find(dict)
+    image = mongo.db.images.find(dict, { 'user': 0})
     return image
 
   @staticmethod

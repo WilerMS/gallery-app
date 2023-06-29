@@ -2,7 +2,8 @@ from flask import request, Response, jsonify
 from flask_restful import Resource, abort
 from bson import json_util
 from services.images import ImagesService
-from utils.json import get_json_property
+from services.users import UsersService
+from utils.json import get_json_property, parse_cursor_to_json
 
 class ImagesController(Resource):
 
@@ -17,9 +18,20 @@ class ImagesController(Resource):
     else:
       images = ImagesService.get_images(user)
 
-    response = json_util.dumps(images)
+    response = parse_cursor_to_json(images)
 
-    return Response(response, mimetype='application/json')
+    ### matching user like with images
+    likes = UsersService.get_likes(user)
+    liked_images = parse_cursor_to_json(likes)
+
+    print ('liked_images')
+    print (liked_images['liked_images'])
+    print (liked_images['liked_images'])
+
+    for image in response:
+      image['is_liked'] = str(image['_id']) in liked_images['liked_images']
+
+    return Response(json_util.dumps(response), mimetype='application/json')
 
   ### [POST] method
   def post(self, param=None, action=None):
@@ -36,6 +48,12 @@ class ImagesController(Resource):
         abort(400, message="Something went wrong", error=True)
       
       ### Add image to likes in UserService
+      liked = UsersService.add_like(user, param)
+
+      if not liked:
+        abort(400, message="Something went wrong", error=True)
+
+      return jsonify({ 'error': False, 'message': 'Success' })
 
     elif param and action == 'unlike':
       inserted = ImagesService.unlike_image(param)
@@ -44,6 +62,12 @@ class ImagesController(Resource):
         abort(400, message="Something went wrong", error=True)
       
       ### Delete image to likes in UserService
+      unliked = UsersService.remove_like(user, param)
+
+      if not unliked:
+        abort(400, message="Something went wrong", error=True)
+
+      return jsonify({ 'error': False, 'message': 'Success' })
 
     else:
       inserted_id = ImagesService.create_image(request.json)
@@ -58,7 +82,7 @@ class ImagesController(Resource):
     user = get_json_property(request.json, 'user')
 
     if not user:
-      abort(400, message="Invalid user id")
+      abort(400, message="Invalid user id", error=True)
     
     upserted = ImagesService.update_image(param, request.json)
 
@@ -73,7 +97,7 @@ class ImagesController(Resource):
     user = get_json_property(request.json, 'user')
 
     if not user:
-      abort(400, message="Invalid user id")
+      abort(400, message="Invalid user id", error=True)
 
     res = ImagesService.delete_image(param, user)
 
