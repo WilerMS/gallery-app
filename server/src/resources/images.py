@@ -11,7 +11,7 @@ class ImagesController(Resource):
   def get(self, param=None):
 
     images = None
-    user = get_json_property(request.json, 'user')
+    user = get_json_property(request.args, 'user')
     
     if param:
       images = ImagesService.get_images_by_label(param, user)
