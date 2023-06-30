@@ -24,12 +24,11 @@ class ImagesController(Resource):
     likes = UsersService.get_likes(user)
     liked_images = parse_cursor_to_json(likes)
 
-    print ('liked_images')
-    print (liked_images['liked_images'])
-    print (liked_images['liked_images'])
+    print(liked_images)
 
-    for image in response:
-      image['is_liked'] = str(image['_id']) in liked_images['liked_images']
+    if liked_images:
+      for image in response:
+        image['is_liked'] = str(image['_id']) in liked_images['liked_images']
 
     return Response(json_util.dumps(response), mimetype='application/json')
 
