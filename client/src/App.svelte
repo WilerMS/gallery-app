@@ -1,6 +1,9 @@
 <script>
 
-  let texto = ''
+  import Header from './components/Header.svelte'
+  import Gallery from './components/Gallery.svelte'
+
+  let images = []
   const get = async () => {
 
     const API_URL = import.meta.env.VITE_SERVER_HOST
@@ -16,11 +19,18 @@
     const data = await res.text()
 
     console.log({ data })
-    texto = data
+    try {
+      images = JSON.parse(data)
+    } catch {
+      images = []
+    }
   }
 
   get()
 
 </script>
 
-<h1>{texto}</h1>
+<div class="w-full min-h-full flex flex-col items-center">
+  <Header />
+  <Gallery {images} />
+</div>
