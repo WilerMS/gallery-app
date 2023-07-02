@@ -29,7 +29,7 @@ class UsersController(Resource):
     if not username:
       abort(400, message="Invalid username", error=True)
 
-    inserted = UsersService.add_user(username)
+    inserted = UsersService.create_user(username)
 
     if not inserted:
       abort(400, message="Invalid username", error=True)
