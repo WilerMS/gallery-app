@@ -15,14 +15,18 @@ def validate_body(body: dict, keys):
 	return dict
 
 def validate_partial_body(body: dict, keys):
+	print('body')
+	print(body)
+	print('body')
+
 	dict = {}
 	for key in keys:
 		value = get_json_property(body, key)
 		if value:
 			dict[key] = value
 		
-	for key, value in body:
-		if key not in body:
+	for key in body:
+		if key not in keys:
 			abort(400, message=f"Unexpected provided data, ({key})", error=True)
 	
 	return dict

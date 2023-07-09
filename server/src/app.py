@@ -8,11 +8,10 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
+api.add_resource(UsersController, '/users', '/users/<string:username>')
 api.add_resource(
   ImagesController,
   '/images',
   '/images/<string:param>',
   '/images/<string:param>/<string:action>'
 )
-
-api.add_resource(UsersController, '/users', '/users/<string:username>')
