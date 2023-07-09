@@ -4,103 +4,110 @@ from bson import json_util
 from services.images import ImagesService
 from services.users import UsersService
 from utils.json import get_json_property, parse_cursor_to_json
+from utils.validation import validate_body, validate_partial_body
 
 class ImagesController(Resource):
+	### [GET] method
+	def get(self, param=None):
+		images = None
+		user = get_json_property(request.args, "user")
 
-  ### [GET] method
-  def get(self, param=None):
+		if param:
+			images = ImagesService.find_images_by_label(param, user)
+		else:
+			images = ImagesService.find_images(user)
 
-    images = None
-    user = get_json_property(request.args, 'user')
-    
-    if param:
-      images = ImagesService.get_images_by_label(param, user)
-    else:
-      images = ImagesService.get_images(user)
+		response = parse_cursor_to_json(images)
 
-    response = parse_cursor_to_json(images)
+		### matching user like with images
+		likes = UsersService.get_likes(user)
+		liked_images = parse_cursor_to_json(likes)
 
-    ### matching user like with images
-    likes = UsersService.get_likes(user)
-    liked_images = parse_cursor_to_json(likes)
+		if liked_images:
+			for image in response:
+				image["is_liked"] = str(image["_id"]) in liked_images["liked_images"]
 
-    print(liked_images)
+		return Response(json_util.dumps(response), mimetype="application/json")
 
-    if liked_images:
-      for image in response:
-        image['is_liked'] = str(image['_id']) in liked_images['liked_images']
+    ### [POST] method
+	def post(self, param=None, action=None):
 
-    return Response(json_util.dumps(response), mimetype='application/json')
+		### INSERT LIKES
+		if param and action == "like":
+            
+			keys = ["username"]
+			user = validate_body(request.json, keys)
+			username = user['username']
 
-  ### [POST] method
-  def post(self, param=None, action=None):
+			inserted = ImagesService.like_image(param)
 
-    user = get_json_property(request.json, 'user')
+			if not inserted:
+				abort(500, message="Something went wrong", error=True)
 
-    if not user:
-      abort(400, message="Invalid user id")
+            ### Add image to likes in UserService
+			liked = UsersService.add_like(username, param)
 
-    if param and action == 'like':
-      inserted = ImagesService.like_image(param)
+			if not liked:
+				abort(500, message="Something went wrong", error=True)
 
-      if not inserted:
-        abort(400, message="Something went wrong", error=True)
-      
-      ### Add image to likes in UserService
-      liked = UsersService.add_like(user, param)
+			return jsonify({"error": False, "message": "Success"})
 
-      if not liked:
-        abort(400, message="Something went wrong", error=True)
+		### DELETE LIKES
+		elif param and action == "unlike":
 
-      return jsonify({ 'error': False, 'message': 'Success' })
+			keys = ["username"]
+			user = validate_body(request.json, keys)
+			username = user['username']
 
-    elif param and action == 'unlike':
-      inserted = ImagesService.unlike_image(param)
+			inserted = ImagesService.unlike_image(param)
 
-      if not inserted:
-        abort(400, message="Something went wrong", error=True)
-      
-      ### Delete image to likes in UserService
-      unliked = UsersService.remove_like(user, param)
+			if not inserted:
+				abort(400, message="Something went wrong", error=True)
 
-      if not unliked:
-        abort(400, message="Something went wrong", error=True)
+			### Delete image to likes in UserService
+			unliked = UsersService.remove_like(username, param)
 
-      return jsonify({ 'error': False, 'message': 'Success' })
+			if not unliked:
+				abort(400, message="Something went wrong", error=True)
 
-    else:
-      inserted_id = ImagesService.create_image(request.json)
+			return jsonify({"error": False, "message": "Success"})
 
-      if not inserted_id:
-        abort(400, message="Something went wrong", error=True)
+		### INSERT IMAGE
+		keys = ['label', 'description', 'url', 'private', 'tags', 'username']
+		image_data = validate_body(request.json, keys)
 
-    return jsonify({ 'error': False, 'message': 'Success' })
+		image = ImagesService.create_image(image_data)
 
-  ### [PUT] method
-  def put(self, param):
-    user = get_json_property(request.json, 'user')
+		if not image:
+			abort(400, message="Something went wrong", error=True)
 
-    if not user:
-      abort(400, message="Invalid user id", error=True)
-    
-    upserted = ImagesService.update_image(param, request.json)
+		return jsonify({"error": False, "message": "Success"})
 
-    if not upserted:
-        abort(400, message="Something went wrong", error=True)
+    ### [PUT] method
+	def put(self, param):
+		keys = ['label', 'description', 'url', 'private', 'tags', 'username']
+		image_data = validate_partial_body(request.json, keys)
 
-    return jsonify({ 'error': False, 'message': 'Success' })
+		if not image_data['username']:
+			abort(400, message="Invalid user id", error=True)
 
-  ### [DELETE] method
-  def delete(self, param):
+		image = ImagesService.update_image(param, image_data)
 
-    user = get_json_property(request.json, 'user')
+		if not image:
+			abort(400, message="Something went wrong", error=True)
 
-    if not user:
-      abort(400, message="Invalid user id", error=True)
+		return jsonify({"error": False, "message": "Success"})
 
-    res = ImagesService.delete_image(param, user)
+    ### [DELETE] method
+	def delete(self, param):
 
-    if not res:
-      abort(404, message="Something went wrong", error=True)
+		keys = ["username"]
+		user = validate_body(request.json, keys)
+		username = user['username']
 
-    return jsonify({ 'message': 'Success', 'error': False })
+		res = ImagesService.delete_image(param, username)
+
+		if not res:
+			abort(404, message="Something went wrong", error=True)
+
+		return jsonify({"message": "Success", "error": False})
