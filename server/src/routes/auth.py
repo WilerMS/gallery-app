@@ -1,13 +1,11 @@
-from flask import Blueprint, jsonify, request, Response
+from flask import Blueprint, jsonify, request
 from models.Users import UsersModel
 from flask_expects_json import expects_json
 from schemas.auth_schema import auth_login_route_schema, auth_register_route_schema
 from werkzeug.exceptions import Unauthorized, BadRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 from constants.env import JWT_SECRET_KEY
-from utils.json import parse_cursor_to_json
 import jwt
-from routes.users import create_user
 
 auth = Blueprint('auth', __name__)
 
