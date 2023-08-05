@@ -5,6 +5,7 @@ from flask_expects_json import expects_json
 from schemas.users_schema import users_route_schema
 from utils.schema_utils import replace_schema_require_properties
 from werkzeug.exceptions import NotFound
+from werkzeug.security import generate_password_hash, check_password_hash
 
 users = Blueprint('users', __name__)
 
@@ -21,6 +22,10 @@ def get_user(username: str):
 @expects_json(users_route_schema)
 def create_user():
   user_data = request.json
+
+  # Password crypted to prevent security vulnerabilities
+  user_data['password'] = generate_password_hash(user_data['password'])
+
   user = UsersModel.insert_one(user_data)
   return Response(json_util.dumps(user), mimetype='application/json')
 

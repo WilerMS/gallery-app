@@ -4,3 +4,4 @@ flask-cors
 flask_pymongo
 flask_restful
 flask-expects-json
+pyjwt

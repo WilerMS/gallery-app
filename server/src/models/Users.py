@@ -14,9 +14,9 @@ collection: Collection = db[USER_MODEL]
 class UsersModel:
 
   @staticmethod
-  def find_one(username: str):
+  def find_one(username: str, include_password: bool = False):
     query = { 'username': username }
-    user = collection.find_one(query, { 'password': 0 })
+    user = collection.find_one(query, { 'password': 1 if include_password else 0 })
     return user
   
   @staticmethod
@@ -38,11 +38,11 @@ class UsersModel:
   def update_one(id: str, data: dict):
     query = { '_id': ObjectId(id) }
     r = collection.update_one(query, { '$set': data })
-    user = collection.find_one(query)
+    user = collection.find_one(query, { 'password': 0 })
     return user 
   
   @staticmethod
   def delete_one(id: str):
     query = { '_id': ObjectId(id) }
-    collection.delete_one(query)
+    collection.delete_one(query, { 'password': 0 })
     return True 
