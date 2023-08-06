@@ -7,8 +7,8 @@ COPY package-lock.json package-lock.json
 COPY tsconfig.json tsconfig.json
 COPY vite.config.ts vite.config.ts
 
-RUN npm install
-
 COPY . .
+
+RUN npm install
 
 CMD ["npm", "run", "dev"]
