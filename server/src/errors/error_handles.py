@@ -1,8 +1,9 @@
 from werkzeug.exceptions import HTTPException
-from pymongo.errors import PyMongoError, DuplicateKeyError
+from pymongo.errors import DuplicateKeyError
+from flask_expects_json import ValidationError
 from flask import json, jsonify
 
-def handle_validation_error(e):
+def handle_validation_error(e: ValidationError):
   error_message = str(e).split('\n', 1)[0].replace("400 Bad Request: ", '')
   response = jsonify({
       "code": 400,
@@ -10,6 +11,12 @@ def handle_validation_error(e):
       "description": error_message, #first line of error
   })
   return response, 400
+
+def handle_400_errors(e):
+  if isinstance(e, ValidationError):
+    handle_validation_error(e)
+  else:
+    handle_exception(e)
 
 def handle_db_duplicate_key_error(e: DuplicateKeyError):
   duplicated_data = e.details['keyValue']
