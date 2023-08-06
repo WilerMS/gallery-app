@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from models.Users import UsersModel
+from models.UsersModel import UsersModel
 from flask_expects_json import expects_json
 from schemas.auth_schema import auth_login_route_schema, auth_register_route_schema
 from werkzeug.exceptions import Unauthorized, BadRequest
@@ -35,7 +35,14 @@ def login():
     algorithm="HS256"
   )
   
-  return token
+  return jsonify({
+    "token": f"Bearer {token}",
+    "user": {
+      "username": user.get("username"),
+      "name": user.get("name"),
+      "avatar": user.get("avatar") or None
+    }
+  })
 
 ### POST REGISTER ###
 @auth.route('/register', methods=['POST'])
@@ -64,4 +71,11 @@ def register():
     algorithm="HS256"
   )
 
-  return token
+  return jsonify({
+    "token": f"Bearer {token}",
+    "user": {
+      "username": user.get("username"),
+      "name": user.get("name"),
+      "avatar": user.get("avatar") or None
+    }
+  })

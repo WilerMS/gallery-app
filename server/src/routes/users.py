@@ -1,11 +1,11 @@
 from flask import Blueprint, jsonify, request, Response
 from bson import json_util
-from models.Users import UsersModel
+from models.UsersModel import UsersModel
 from flask_expects_json import expects_json
 from schemas.users_schema import users_route_schema
 from utils.schema_utils import replace_schema_require_properties
 from werkzeug.exceptions import NotFound
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash
 
 users = Blueprint('users', __name__)
 

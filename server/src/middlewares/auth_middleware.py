@@ -2,7 +2,7 @@ from typing import Callable
 from flask import request
 from werkzeug.exceptions import Unauthorized, BadRequest
 from constants.env import JWT_SECRET_KEY
-from models.Users import UsersModel
+from models.UsersModel import UsersModel
 import jwt
 
 def auth_middleware(function: Callable):
