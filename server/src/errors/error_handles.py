@@ -3,7 +3,7 @@ from pymongo.errors import DuplicateKeyError
 from flask_expects_json import ValidationError
 from flask import json, jsonify
 
-def handle_validation_error(e: ValidationError):
+def handle_validation_error(e):
   error_message = str(e).split('\n', 1)[0].replace("400 Bad Request: ", '')
   response = jsonify({
       "code": 400,
