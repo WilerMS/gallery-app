@@ -2,9 +2,11 @@ from flask import Flask
 from flask_cors import CORS
 from routes.users import users
 from routes.auth import auth
+from routes.images import images
 from werkzeug.exceptions import HTTPException
 import errors.error_handles as errors
 from pymongo.errors import PyMongoError, DuplicateKeyError
+from constants.api import API_V1_VERSION
 
 
 app = Flask(__name__)
@@ -15,8 +17,9 @@ CORS(app)
 
 
 # Import routes
-app.register_blueprint(users, url_prefix='/users')
-app.register_blueprint(auth, url_prefix='/auth')
+app.register_blueprint(auth, url_prefix=f'{API_V1_VERSION}/auth')
+app.register_blueprint(users, url_prefix=f'{API_V1_VERSION}/users')
+app.register_blueprint(images, url_prefix=f'{API_V1_VERSION}/images')
 
 
 # Registering errors
