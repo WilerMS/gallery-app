@@ -12,6 +12,7 @@ users = Blueprint('users', __name__)
 
 ### GET ###
 @users.route('/<string:username>', endpoint='get_user', methods=['GET'])
+@auth_middleware()
 def get_user(username: str):
   user = UsersModel.find_one(username)
   if not user:
@@ -32,7 +33,7 @@ def post_user():
 
 ### PUT ###
 @users.route('/<string:id>', endpoint='put_user', methods=['PUT'])
-@auth_middleware
+@auth_middleware()
 @expects_json(replace_schema_require_properties(users_route_schema, []))
 def put_user(current_user, id: str):
   user = UsersModel.find_one_by_id(id)
@@ -44,7 +45,7 @@ def put_user(current_user, id: str):
 
 ### DELETE ###
 @users.route('/<string:id>', endpoint='delete_user', methods=['DELETE'])
-@auth_middleware
+@auth_middleware()
 def delete_user(current_user, id: str):
   user = UsersModel.find_one_by_id(id)
   if not user:
