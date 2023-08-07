@@ -6,11 +6,12 @@ from schemas.users_schema import users_route_schema
 from utils.schema_utils import replace_schema_require_properties
 from werkzeug.exceptions import NotFound
 from werkzeug.security import generate_password_hash
+from middlewares.auth_middleware import auth_middleware
 
 users = Blueprint('users', __name__)
 
 ### GET ###
-@users.route('/<string:username>', methods=['GET'])
+@users.route('/<string:username>', endpoint='get_user', methods=['GET'])
 def get_user(username: str):
   user = UsersModel.find_one(username)
   if not user:
@@ -18,9 +19,9 @@ def get_user(username: str):
   return Response(json_util.dumps(user), mimetype='application/json')
 
 ### POST ###
-@users.route('/', methods=['POST'])
+@users.route('/', endpoint='post_user', methods=['POST'])
 @expects_json(users_route_schema)
-def create_user():
+def post_user():
   user_data = request.json
 
   # Password crypted to prevent security vulnerabilities
@@ -30,9 +31,10 @@ def create_user():
   return Response(json_util.dumps(user), mimetype='application/json')
 
 ### PUT ###
-@users.route('/<string:id>', methods=['PUT'])
+@users.route('/<string:id>', endpoint='put_user', methods=['PUT'])
+@auth_middleware
 @expects_json(replace_schema_require_properties(users_route_schema, []))
-def update_user(id: str):
+def put_user(current_user, id: str):
   user = UsersModel.find_one_by_id(id)
   if not user:
     raise NotFound("User not found")
@@ -41,8 +43,9 @@ def update_user(id: str):
   return Response(json_util.dumps(user), mimetype='application/json')
 
 ### DELETE ###
-@users.route('/<string:id>', methods=['DELETE'])
-def delete_user(id: str):
+@users.route('/<string:id>', endpoint='delete_user', methods=['DELETE'])
+@auth_middleware
+def delete_user(current_user, id: str):
   user = UsersModel.find_one_by_id(id)
   if not user:
     raise NotFound("User not found")
