@@ -38,6 +38,7 @@ def login():
   return jsonify({
     "token": f"Bearer {token}",
     "user": {
+      "id": user.get("_id"),
       "username": user.get("username"),
       "name": user.get("name"),
       "avatar": user.get("avatar") or None
@@ -74,6 +75,7 @@ def register():
   return jsonify({
     "token": f"Bearer {token}",
     "user": {
+      "id": user.get("_id"),
       "username": user.get("username"),
       "name": user.get("name"),
       "avatar": user.get("avatar") or None

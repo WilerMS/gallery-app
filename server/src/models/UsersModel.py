@@ -28,11 +28,11 @@ class UsersModel:
   @staticmethod
   def insert_one(user: dict):
     r = collection.insert_one({ **user, 'likedImages': [] })
-    user = collection.find_one(
+    user_data = collection.find_one(
       { '_id': ObjectId(r.inserted_id) },
       { 'password': 0 }
     )
-    return user
+    return user_data
   
   @staticmethod
   def update_one(id: str, data: dict):
