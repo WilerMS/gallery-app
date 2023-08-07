@@ -1,9 +1,9 @@
-from utils.schema_utils import transform_schema_to_mongo_schema
+import utils.schema_utils as schema_utils
 
 images_route_schema = {
   "type": "object",
   "additionalProperties": False,
-  "required": ["title", "url", "likes", "userId"],
+  "required": ["title", "url", "userId"],
   "properties": {
     "title": {
       "type": "string"
@@ -28,6 +28,8 @@ images_route_schema = {
   }
 }
 
+images_post_route_schema = schema_utils.delete_schema_properties(images_route_schema, ['likes', 'userId'])
+images_put_route_schema = schema_utils.replace_schema_require_properties(images_post_route_schema, [])
 images_db_schema = {
-  "$jsonSchema": transform_schema_to_mongo_schema(images_route_schema)
+  "$jsonSchema": schema_utils.transform_schema_to_mongo_schema(images_route_schema)
 }

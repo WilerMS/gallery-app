@@ -1,40 +1,107 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response, jsonify
+from flask_expects_json import expects_json
+from bson import json_util
+import schemas.images_schema as images_schemas
+from models.ImagesModel import ImagesModel
+from models.UsersModel import UsersModel
+from werkzeug.exceptions import NotFound, BadRequest
+from middlewares.auth_middleware import auth_middleware
 
 images = Blueprint('images', __name__)
 
 ### GET ONE IMAGE ###
 @images.route('/<string:id>', endpoint='get_image', methods=['GET'])
-def get_image(id: str):
-  return id
+@auth_middleware(allow_unauthenticated=True)
+def get_image(current_user, id: str):
+  image = ImagesModel.find_one(id)
+
+  if image['private'] and str(current_user['_id']) != image['userId']:
+    raise NotFound('Image Not found')
+
+
+  image['isOwner'] = image['userId'] == str(current_user['_id'])
+  image['liked'] = str(image['_id']) in current_user['likedImages']
+
+  return Response(json_util.dumps(image), mimetype='application/json')
 
 
 ### GET IMAGES ###
 @images.route('/', endpoint='get_images', methods=['GET'])
-def get_images():
-  args = request.args
-  return args
+@auth_middleware(allow_unauthenticated=True)
+def get_images(current_user):
+  query = {}
+
+  # Include tilte query param
+  q = request.args.get('q', None)
+  if q: 
+    query['title'] = { '$regex': f'.*{q}.*', '$options': 'i' }
+
+  # Finding userId
+  owner_username = request.args.get('owner', None)
+  owner = UsersModel.find_one(owner_username) if owner_username else None
+  if owner:
+    # Include userId query param
+    query['userId'] = str(owner['_id'])
+
+  # Include page and limit params  
+  page = int(request.args.get('page', 1))
+  limit = int(request.args.get('limit', 10))
+
+  # Include logic for private photos
+  query['$or'] = [
+    { "private": True, "userId": str(current_user['_id']) },
+    { "private": False }
+  ]
+
+  # Finding images
+  images = ImagesModel.find_many(query, page, limit)
+
+  for image in images:
+    image['isOwner'] = image['userId'] == str(current_user['_id'])
+    image['liked'] = str(image['_id']) in current_user['likedImages']
+  
+  return Response(json_util.dumps(images), mimetype='application/json')
 
 
 ### POST IMAGE ###
 @images.route('/', endpoint='post_image', methods=['POST'])
-def post_image():
+@auth_middleware(allow_unauthenticated=False)
+@expects_json(images_schemas.images_post_route_schema)
+def post_image(current_user):
   body = request.json
-  return body
+  body['private'] = body.get('private', False)
+  body['userId'] = str(current_user['_id'])
+  image = ImagesModel.insert_one(body)
+  image['_id']: str(image['_id'])
+  return Response(json_util.dumps(image), mimetype='application/json')
 
 
 ### UPDATE IMAGE ###
 @images.route('/<string:id>', endpoint='put_image', methods=['PUT'])
-def put_image(id: str):
-  body = request.json
-  return {
-    "id": id,
-    "body": body
-  }
+@auth_middleware(allow_unauthenticated=False)
+@expects_json(images_schemas.images_put_route_schema)
+def put_image(current_user, id: str):
+  image = ImagesModel.find_one(id)
+  if not image:
+    raise NotFound("Image not found")
+  
+  if str(current_user['_id']) != image['userId']:
+    raise BadRequest("You do not own this photo")
+  
+  image = ImagesModel.update_one(id, request.json)
+  return Response(json_util.dumps(image), mimetype='application/json')
 
 
 ### DELETE IMAGE ###
 @images.route('/<string:id>', endpoint='delete_image', methods=['DELETE'])
-def delete_image(id: str):
-  return {
-    "id": id
-  }
+@auth_middleware(allow_unauthenticated=False)
+def delete_image(current_user, id: str):
+  image = ImagesModel.find_one(id)
+  if not image:
+    raise NotFound("Image not found")
+  
+  if str(current_user['_id']) != image['userId']:
+    raise BadRequest("You do not own this photo")
+
+  ImagesModel.delete_one(id)
+  return jsonify({ "message": "Image Successfully deleted" }), 200

@@ -1,3 +1,6 @@
+from typing import List
+import copy
+
 def transform_schema_to_mongo_schema(schema: dict):
   new_schema = {}
   for key, value in schema.items():
@@ -16,7 +19,16 @@ def transform_schema_to_mongo_schema(schema: dict):
 
   return new_schema
 
-def replace_schema_require_properties(schema: dict, properties: list):
-  new_schema = schema.copy()
+def replace_schema_require_properties(schema: dict, properties: List[str]):
+  new_schema = copy.deepcopy(schema)
   new_schema['required'] = properties
   return new_schema
+
+def delete_schema_properties(schema: dict, properties: List[str]):
+  new_schema = copy.deepcopy(schema)
+  for property in properties:
+    if property in new_schema['required']:
+      new_schema['required'].remove(property)
+    del new_schema["properties"][property]
+  return new_schema
+
