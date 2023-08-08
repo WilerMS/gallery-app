@@ -15,9 +15,12 @@ images = Blueprint('images', __name__)
 def get_image(current_user, id: str):
   image = ImagesModel.find_one(id)
 
-  if image['private'] and str(current_user['_id']) != image['userId']:
-    raise NotFound('Image Not found')
-
+  # Check if current user owns a private image
+  if image['private']:
+    if not current_user:
+      raise NotFound('Image Not found')
+    elif str(current_user['_id']) != image['userId']:
+      raise NotFound('Image Not found')
 
   image['isOwner'] = image['userId'] == str(current_user['_id'])
   image['liked'] = str(image['_id']) in current_user['likedImages']
