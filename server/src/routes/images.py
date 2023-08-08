@@ -66,7 +66,13 @@ def get_images(current_user):
     image['isOwner'] = bool(current_user) and image['userId'] == str(current_user['_id'])
     image['liked'] = bool(current_user) and str(image['_id']) in current_user['likedImages']
   
-  return Response(json_util.dumps(images), mimetype='application/json')
+  response = json_util.dumps({
+    'page': page,
+    'limit': limit,
+    'images': images
+  })
+  
+  return Response(response, mimetype='application/json')
 
 
 ### POST IMAGE ###
