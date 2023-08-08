@@ -48,17 +48,20 @@ def get_images(current_user):
   limit = int(request.args.get('limit', 10))
 
   # Include logic for private photos
-  query['$or'] = [
-    { "private": True, "userId": str(current_user['_id']) },
-    { "private": False }
-  ]
+  if current_user:
+    query['$or'] = [
+      { "private": True, "userId": str(current_user['_id']) },
+      { "private": False }
+    ]
+  else:
+    query['private'] = False
 
   # Finding images
   images = ImagesModel.find_many(query, page, limit)
 
   for image in images:
-    image['isOwner'] = image['userId'] == str(current_user['_id'])
-    image['liked'] = str(image['_id']) in current_user['likedImages']
+    image['isOwner'] = bool(current_user) and image['userId'] == str(current_user['_id'])
+    image['liked'] = bool(current_user) and str(image['_id']) in current_user['likedImages']
   
   return Response(json_util.dumps(images), mimetype='application/json')
 

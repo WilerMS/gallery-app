@@ -11,7 +11,9 @@ def auth_middleware(allow_unauthenticated: bool = False):
 
       token = None
       if "Authorization" in request.headers:
-        token = request.headers["Authorization"].split(" ")[1]
+        parts = request.headers["Authorization"].split(" ")
+        if len(parts) == 2:
+          token = parts[1]
       
       # If decorator allow unauthenticated users
       if not token and allow_unauthenticated:
