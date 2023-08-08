@@ -45,3 +45,19 @@ class ImagesModel:
     query = { '_id': ObjectId(id) }
     collection.delete_one(query)
     return True 
+  
+  @staticmethod
+  def like(id: str):
+    query = {'_id': ObjectId(id)}
+    data = {'$inc': { 'likes': 1 }}
+    collection.update_one(query, data)
+    image = collection.find_one(query)
+    return image
+
+  @staticmethod
+  def unlike(id: str):
+    query = {'_id': ObjectId(id)}
+    data = {'$inc': { 'likes': -1 }}
+    collection.update_one(query, data)
+    image = collection.find_one(query)
+    return image

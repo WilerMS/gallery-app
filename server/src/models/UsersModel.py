@@ -45,4 +45,20 @@ class UsersModel:
   def delete_one(id: str):
     query = { '_id': ObjectId(id) }
     collection.delete_one(query, { 'password': 0 })
-    return True 
+    return True
+  
+  @staticmethod
+  def like_image(user_id: str, image_id: str):
+    collection.update_one(
+      { '_id': ObjectId(user_id) },
+      { '$push': { 'likedImages': image_id  } }
+    )
+    return image_id
+  
+  @staticmethod
+  def unlike_image(user_id: str, image_id: str):
+    collection.update_one(
+      { '_id': ObjectId(user_id) },
+      { '$push': { 'likedImages': image_id  } }
+    )
+    return image_id

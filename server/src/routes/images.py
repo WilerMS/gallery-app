@@ -82,13 +82,18 @@ def post_image(current_user):
 @expects_json(images_schemas.images_put_route_schema)
 def put_image(current_user, id: str):
   image = ImagesModel.find_one(id)
+
+  # Check if the image already exists
   if not image:
     raise NotFound("Image not found")
   
+  # Check if current user owns the current image
   if str(current_user['_id']) != image['userId']:
     raise BadRequest("You do not own this photo")
   
+  # Update image
   image = ImagesModel.update_one(id, request.json)
+  
   return Response(json_util.dumps(image), mimetype='application/json')
 
 
@@ -97,11 +102,60 @@ def put_image(current_user, id: str):
 @auth_middleware(allow_unauthenticated=False)
 def delete_image(current_user, id: str):
   image = ImagesModel.find_one(id)
+
+  # Check if the image already exists
   if not image:
     raise NotFound("Image not found")
   
+  # Check if current user owns the current image
   if str(current_user['_id']) != image['userId']:
-    raise BadRequest("You do not own this photo")
+    raise BadRequest("You do not own this image")
 
+  # Delete Image
   ImagesModel.delete_one(id)
+
   return jsonify({ "message": "Image Successfully deleted" }), 200
+
+### LIKE IMAGE ###
+@images.route('/<string:id>/like', endpoint='like_image', methods=['POST'])
+@auth_middleware(allow_unauthenticated=False)
+def like_image(current_user, id: str):
+  image = ImagesModel.find_one(id)
+
+  # Check if the image already exists
+  if not image:
+    raise NotFound("Image not found")
+
+  # Check if user liked the image before
+  if str(image['_id']) in current_user['likedImages']:
+    jsonify({ "message": "Like Successfully added" }), 200
+
+  # Add like to image
+  ImagesModel.like(id)
+
+  # Add like to user
+  UsersModel.like_image(str(current_user['_id']), str(image['_id']))
+
+  return jsonify({ "message": "Like Successfully added" }), 200
+
+### UNLIKE IMAGE ###
+@images.route('/<string:id>/unlike', endpoint='unlike_image', methods=['POST'])
+@auth_middleware(allow_unauthenticated=False)
+def unlike_image(current_user, id: str):
+  image = ImagesModel.find_one(id)
+
+  # Check if the image already exists
+  if not image:
+    raise NotFound("Image not found")
+  
+  # Check if user liked the image before
+  if str(image['_id']) not in current_user['likedImages']:
+    jsonify({ "message": "Like Successfully deleted" }), 200
+
+  # Add like to image
+  ImagesModel.unlike(id)
+  
+  # Add like to user
+  UsersModel.unlike_image(str(current_user['_id']), str(image['_id']))
+
+  return jsonify({ "message": "Like Successfully deleted" }), 200

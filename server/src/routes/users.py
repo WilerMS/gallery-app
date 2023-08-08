@@ -13,10 +13,13 @@ users = Blueprint('users', __name__)
 ### GET ###
 @users.route('/<string:username>', endpoint='get_user', methods=['GET'])
 @auth_middleware()
-def get_user(username: str):
+def get_user(current_user: dict, username: str):
   user = UsersModel.find_one(username)
   if not user:
     raise NotFound("User not found")
+  if str(user['_id']) != str(current_user['_id']):
+    raise NotFound("User not found")
+  
   return Response(json_util.dumps(user), mimetype='application/json')
 
 ### POST ###
@@ -39,6 +42,8 @@ def put_user(current_user, id: str):
   user = UsersModel.find_one_by_id(id)
   if not user:
     raise NotFound("User not found")
+  if str(user['_id']) != str(current_user['_id']):
+    raise NotFound("User not found")
   user_data = request.json
   user = UsersModel.update_one(id, user_data)
   return Response(json_util.dumps(user), mimetype='application/json')
@@ -49,6 +54,8 @@ def put_user(current_user, id: str):
 def delete_user(current_user, id: str):
   user = UsersModel.find_one_by_id(id)
   if not user:
+    raise NotFound("User not found")
+  if str(user['_id']) != str(current_user['_id']):
     raise NotFound("User not found")
   UsersModel.delete_one(id)
   return jsonify({ "message": "User Successfully deleted"}), 200
