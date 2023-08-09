@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 # CORS policy
 # Allow those domains which can access the server
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
 
 
 # Import routes
