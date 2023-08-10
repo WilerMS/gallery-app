@@ -13,13 +13,13 @@ app = Flask(__name__)
 
 # CORS policy
 # Allow those domains which can access the server
-CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
+cors = CORS(app)
 
 
 # Import routes
-app.register_blueprint(auth, url_prefix=f'{API_V1_VERSION}/auth')
-app.register_blueprint(users, url_prefix=f'{API_V1_VERSION}/users')
-app.register_blueprint(images, url_prefix=f'{API_V1_VERSION}/images')
+app.register_blueprint(auth)
+app.register_blueprint(users)
+app.register_blueprint(images)
 
 
 # Registering errors

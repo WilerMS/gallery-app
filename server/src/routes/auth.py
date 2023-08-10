@@ -5,9 +5,10 @@ from schemas.auth_schema import auth_login_route_schema, auth_register_route_sch
 from werkzeug.exceptions import Unauthorized, BadRequest
 from werkzeug.security import generate_password_hash, check_password_hash
 from constants.env import JWT_SECRET_KEY
+from constants.api import API_V1_VERSION
 import jwt
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint('auth', __name__, url_prefix=f'{API_V1_VERSION}/auth')
 
 ### POST LOGIN ###
 @auth.route('/login', methods=['POST'])

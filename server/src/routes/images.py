@@ -6,8 +6,11 @@ from models.ImagesModel import ImagesModel
 from models.UsersModel import UsersModel
 from werkzeug.exceptions import NotFound, BadRequest
 from middlewares.auth_middleware import auth_middleware
+from constants.api import API_V1_VERSION
 
-images = Blueprint('images', __name__)
+
+images = Blueprint('images', __name__, url_prefix=f'{API_V1_VERSION}/images')
+
 
 ### GET ONE IMAGE ###
 @images.route('/<string:id>', endpoint='get_image', methods=['GET'])

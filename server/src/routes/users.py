@@ -7,8 +7,9 @@ from utils.schema_utils import replace_schema_require_properties
 from werkzeug.exceptions import NotFound
 from werkzeug.security import generate_password_hash
 from middlewares.auth_middleware import auth_middleware
+from constants.api import API_V1_VERSION
 
-users = Blueprint('users', __name__)
+users = Blueprint('users', __name__, url_prefix=f'{API_V1_VERSION}/users')
 
 ### GET ###
 @users.route('/<string:username>', endpoint='get_user', methods=['GET'])
