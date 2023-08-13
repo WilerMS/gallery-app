@@ -14,7 +14,7 @@ export default function Header () {
   }
 
   return (
-    <Navbar maxWidth='full' height='90px' isBordered>
+    <Navbar maxWidth='full' height='90px'>
       <NavbarContent>
         <span className="text-2xl bg-slate-800 text-white px-6 py-2 rounded-2xl mr-8">
           La gallerie d&apos;Eve
