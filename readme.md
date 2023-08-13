@@ -1,6 +1,6 @@
 # Image Gallery Application
 
-![image](https://github.com/WilerMS/gallery-app/assets/70902862/ca7b93e3-e13d-417d-a3ed-cc5478ec96bb)
+![image](https://github.com/WilerMS/gallery-app/assets/70902862/e2d19f09-89ea-4744-b093-7ee6582b1264)
 
 [![React](https://img.shields.io/badge/Frontend-React-blueviolet)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/Frontend-TypeScript-blue)](https://www.typescriptlang.org/)
