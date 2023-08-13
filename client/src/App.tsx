@@ -1,7 +1,9 @@
-function App () {
+import { Button } from '@nextui-org/react'
+
+export default function App () {
   return (
-    <h1>Hello World</h1>
+    <Button color="primary">
+      Button
+    </Button>
   )
 }
-
-export default App
