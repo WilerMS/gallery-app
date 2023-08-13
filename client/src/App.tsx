@@ -1,9 +1,20 @@
-import { Button } from '@nextui-org/react'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes
+} from 'react-router-dom'
+import Home from './pages/Home'
+import NotFound from './pages/NotFound'
 
 export default function App () {
   return (
-    <Button color="primary">
-      Button
-    </Button>
+    <div className='App'>
+      <Router>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </Router>
+    </div>
   )
 }
