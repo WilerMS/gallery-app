@@ -8,10 +8,7 @@ export default function Header () {
   const { theme, setTheme } = useTheme()
 
   const checkActive = (path: string) => location.pathname === path
-
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light')
-  }
+  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light')
 
   return (
     <Navbar maxWidth='full' height='90px'>
@@ -44,19 +41,22 @@ export default function Header () {
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
+            {/* TODO: Change this to login button if not session */}
             <DropdownItem key="profile" className="h-14 gap-2">
-              <div className='flex gap-4 items-center'>
-                <Avatar
-                  as="div"
-                  color="secondary"
-                  size="sm"
-                  src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-                <div>
-                  <p className="font-semibold">Signed in as</p>
-                  <p className="font-semibold">wiler@example.com</p>
+              <Link to='/profile'>
+                <div className='flex gap-4 items-center'>
+                  <Avatar
+                    as="div"
+                    color="secondary"
+                    size="sm"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                  />
+                  <div>
+                    <p className="font-semibold">Signed in as</p>
+                    <p className="font-semibold">wiler@example.com</p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem onClick={toggleTheme} key="theme-mode">
