@@ -18,14 +18,14 @@ export default function App () {
       <Router>
         <Header />
           <Suspense>
-        <Routes>
-            <Route key='home' path='/' element={<Home />} />
-            <Route key='explore' path='/explore' element={<Explore />} />
-            <Route key='profile' path='/profile/:userName' element={<Profile />} />
-            <Route key='settings' path='/settings' element={<Settings />} />
-            <Route key='notfound' path='*' element={<NotFound />} />
-        </Routes>
-            </Suspense>
+            <Routes>
+                <Route key='home' path='/' element={<Home />} />
+                <Route key='explore' path='/explore' element={<Explore />} />
+                <Route key='profile' path='/profile/:userName' element={<Profile />} />
+                <Route key='settings' path='/settings' element={<Settings />} />
+                <Route key='notfound' path='*' element={<NotFound />} />
+            </Routes>
+          </Suspense>
       </Router>
     </div>
   )
