@@ -1,13 +1,19 @@
 import { DeleteIcon } from '@app/icons'
-import { type Image } from '@app/types'
-import { type FC } from 'react'
+import { type Image as ImageType } from '@app/types'
+import { Image } from '@nextui-org/react'
+import { type LegacyRef, type FC } from 'react'
 
-interface Props extends Image {}
+interface Props extends ImageType {
+}
 
 const Figure: FC<Props> = ({ title, url, likes, liked }) => {
   return (
-    <div className="relative group w-full rounded-2xl overflow-hidden float-left mb-5 max-h-[400px] md:max-h-[600px]">
-      <img className="w-full h-full object-cover" src={url} alt={title} />
+    <div className="relative group w-full flex rounded-2xl overflow-hidden mb-5 min-h-[300px] max-h-[400px] md:max-h-[600px]">
+      <Image
+        className="w-full h-full object-cover z-0"
+        alt={title}
+        src={url}
+      />
       <button className="absolute group-hover:opacity-100 transition-all opacity-0 top-2 right-2 rounded-full bg-white w-[30px] h-[30px] flex items-center justify-center shadow-lg">
         <DeleteIcon />
       </button>

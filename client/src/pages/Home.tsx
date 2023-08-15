@@ -11,7 +11,7 @@ export default function Home () {
     <main className='px-6 w-full'>
       <InfiniteScroll
         className={cn(
-          'w-full h-full',
+          'w-full h-full pb-6',
           'md:columns-4 md:gap-5',
           'lg:columns-6',
           'xl:columns-8',
@@ -22,9 +22,9 @@ export default function Home () {
         hasMore={true}
         loader={<></>}
       >
-        {images.map((image, i) => (
-          <Figure key={image._id.$oid} {...image} />
-        ))}
+        {images.map(
+          image => <Figure key={image._id.$oid} {...image} />
+        )}
       </InfiniteScroll>
 
       <button
