@@ -17,6 +17,8 @@ This repository contains a full-stack image gallery application. The frontend is
 - Add and remove images by providing a description and image link
 - Search functionality
 - Ability to delete an image by entering a unique password known only to admins
+- Generate images with AI and save it at the same time
+- Upload images to the storage server
 
 ## Prerequisites
 
@@ -42,8 +44,8 @@ Follow the steps below to launch the application:
 
 3. Set the required environment variables. Edit the `.env` file and replace the placeholders with your own values:
 
-   ```plaintext
-   ADMIN_PASSWORD=your-unique-admin-password
+   ```yml
+   VARIABLES_COMMING_SOON=variables-coming-soon
    ```
 
 4. Build and run the Docker container:
