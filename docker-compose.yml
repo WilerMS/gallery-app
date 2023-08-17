@@ -11,7 +11,7 @@ services:
     ports:
       - 5173:5173
     environment:
-      - VITE_SERVER_HOST=localhost:5000
+      - VITE_SERVER_HOST=http://192.168.1.160:5000
     volumes:
       - "./client:/app"
     links:

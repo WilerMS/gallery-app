@@ -1,5 +1,6 @@
 import { type FetchImages } from '@app/types'
 import { api } from './api'
+import { API_V1_URL } from '@app/constants/env'
 
 interface FetchImagesType {
   page: number | string
@@ -8,7 +9,7 @@ interface FetchImagesType {
 }
 
 export const fetchImages = async ({ page, limit = 10, ...params }: FetchImagesType) => {
-  const url = new URL('http://localhost:5000/api/v1/images')
+  const url = new URL(`${API_V1_URL}/images`)
   url.searchParams.append('page', `${page}`)
   url.searchParams.append('limit', `${limit}`)
 
