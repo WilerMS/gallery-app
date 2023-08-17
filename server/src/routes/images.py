@@ -72,7 +72,8 @@ def get_images(current_user):
   response = json_util.dumps({
     'page': page,
     'limit': limit,
-    'images': images
+    'images': images,
+    'lastPage': len(images) < limit
   })
   
   return Response(response, mimetype='application/json')
