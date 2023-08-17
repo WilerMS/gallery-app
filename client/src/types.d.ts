@@ -1,6 +1,7 @@
 export interface FetchImages {
   page: number
   limit: number
+  lastPage: boolean
   images: Image[]
 }
 

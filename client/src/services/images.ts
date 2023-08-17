@@ -16,6 +16,5 @@ export const fetchImages = async ({ page, limit = 10, ...params }: FetchImagesTy
     url.searchParams.append(key, `${value}`)
   })
 
-  const data = await api<FetchImages>(url)
-  return data.images
+  return await api<FetchImages>(url)
 }

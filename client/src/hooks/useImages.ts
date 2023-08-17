@@ -5,15 +5,18 @@ import { type Image } from '@app/types'
 export const useImages = () => {
   const [images, setImages] = useState<Image[]>([])
   const [page, setPage] = useState(1)
+  const [lastPage, setLastPage] = useState(false)
   const [filters, setFilters] = useState({ })
 
   useEffect(() => {
     fetchImages({ page, limit: 20, ...filters })
-      .then((images) => {
+      .then((data) => {
         if (page === 1) {
-          setImages(images)
+          setImages(data.images)
+          setLastPage(data.lastPage)
         } else if (page > 1) {
-          setImages(prev => [...prev, ...images])
+          setImages(prev => [...prev, ...data.images])
+          setLastPage(data.lastPage)
         }
       })
       .catch(err => console.log('Error fetching images:', err))
@@ -28,6 +31,7 @@ export const useImages = () => {
   return {
     page,
     images,
+    lastPage,
     fetchNextPage,
     modifyFilters
   }
