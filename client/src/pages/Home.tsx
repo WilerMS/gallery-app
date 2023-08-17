@@ -1,11 +1,11 @@
 import Figure from '@app/components/Figure'
+import QuickAddMenuButton from '@app/components/QuickAddMenuButton'
 import { useImages } from '@app/hooks/useImages'
-import { AddIcon } from '@app/icons'
 import cn from 'classnames'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 export default function Home () {
-  const { images, fetchNextPage } = useImages()
+  const { images, lastPage, modifyFilters, fetchNextPage } = useImages()
 
   return (
     <main className='px-6 w-full'>
@@ -19,7 +19,7 @@ export default function Home () {
         )}
         dataLength={images.length}
         next={fetchNextPage}
-        hasMore={true}
+        hasMore={!lastPage}
         loader={<></>}
       >
         {images.map(
@@ -27,14 +27,7 @@ export default function Home () {
         )}
       </InfiniteScroll>
 
-      <button
-        className={cn(
-          'h-16 w-16 border-2 rounded-full center fixed bottom-6 right-6 shadow-lg bg-white',
-          'dark:bg-slate-800 dark:border-gray-800'
-        )}
-      >
-        <AddIcon width={32} height={32}/>
-      </button>
+      <QuickAddMenuButton />
 
     </main>
   )
