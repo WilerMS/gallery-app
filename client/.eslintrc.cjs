@@ -33,5 +33,6 @@ module.exports = {
     "@typescript-eslint/promise-function-async": "off",
     "@typescript-eslint/return-await": "off",
     "@typescript-eslint/restrict-template-expressions": "off",
+    '@typescript-eslint/no-floating-promises': 'off'
   },
 };
