@@ -28,6 +28,7 @@
       "@styles/*": ["./src/styles/*"],
       "@icons/*": ["./src/icons/*"],
       "@images/*": ["./src/images/*"],
+      "@redux/*": ["./src/redux/*"],
       "@/*": ["./*"],
     }
   },
