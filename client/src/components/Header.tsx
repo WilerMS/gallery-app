@@ -12,7 +12,7 @@ export default function Header () {
   const checkActive = (path: string) => location.pathname === path
   const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light')
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const handleCloseMenu = () => setIsMenuOpen(false)
+  /* const handleCloseMenu = () => setIsMenuOpen(false) */
 
   return (
     <Navbar maxWidth='full' height='90px' onMenuOpenChange={setIsMenuOpen}>
