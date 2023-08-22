@@ -5,7 +5,7 @@ import cn from 'classnames'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 export default function Home () {
-  const { images, lastPage, modifyFilters, fetchNextPage } = useImages()
+  const { images, lastPage, fetchNextPage } = useImages()
 
   return (
     <main className='px-6 w-full'>

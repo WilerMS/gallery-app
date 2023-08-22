@@ -17,7 +17,7 @@ export const filtersSlice = createSlice({
   name: 'counter',
   initialState,
   reducers: {
-    setFilters: (state, action: PayloadAction<FiltersState>) => {
+    setFilters: (state, action: PayloadAction<Partial<FiltersState>>) => {
       return {
         ...state,
         ...action.payload,

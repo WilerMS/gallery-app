@@ -32,7 +32,7 @@ export const useImages = () => {
   }, [filters.page, filters.q])
 
   const fetchNextPage = () => dispatch(nextFilterPage())
-  const modifyFilters = (newFilter: FiltersState) => {
+  const modifyFilters = (newFilter: Partial<FiltersState>) => {
     dispatch(setFilters(newFilter))
   }
 
