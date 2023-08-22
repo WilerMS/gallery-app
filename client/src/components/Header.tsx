@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import DarkModeSwitcher from './DarkModeSwitcher'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
+import Filters from './Filters'
 
 export default function Header () {
   const location = useLocation()
@@ -15,7 +16,7 @@ export default function Header () {
 
   return (
     <Navbar maxWidth='full' height='90px' onMenuOpenChange={setIsMenuOpen}>
-      <NavbarContent>
+      <NavbarContent className='!flex-grow-0 !basis-[unset]'>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
           className="sm:hidden"
@@ -31,6 +32,10 @@ export default function Header () {
             <Link to='/explore'>Explore</Link>
           </NavbarItem>
         </NavbarContent>
+      </NavbarContent>
+
+      <NavbarContent as="div">
+        <Filters />
       </NavbarContent>
 
       <NavbarContent as="div" className='!flex-grow-0'>
