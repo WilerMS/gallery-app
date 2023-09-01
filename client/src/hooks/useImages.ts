@@ -36,6 +36,8 @@ export const useImages = () => {
     dispatch(setFilters(newFilter))
   }
 
+  console.log({ ...filters })
+
   return {
     page: filters.page,
     images,
