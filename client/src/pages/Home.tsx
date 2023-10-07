@@ -5,7 +5,7 @@ import cn from 'classnames'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
 export default function Home () {
-  const { images, lastPage, fetchNextPage } = useImages()
+  const { images, hasNextPage, totalImages, fetchNextPage } = useImages()
 
   return (
     <main className='px-6 w-full'>
@@ -17,14 +17,14 @@ export default function Home () {
           'xl:columns-8',
           '2xl:columns-10'
         )}
-        dataLength={images.length}
+        dataLength={totalImages}
         next={fetchNextPage}
-        hasMore={!lastPage}
+        hasMore={hasNextPage}
         loader={<></>}
       >
-        {images.map(
-          image => <Figure key={image._id.$oid} {...image} />
-        )}
+        {images.map(({ images }) => (
+          images.map(image => <Figure key={image._id.$oid} {...image} />)
+        ))}
       </InfiniteScroll>
 
       <QuickAddMenuButton />

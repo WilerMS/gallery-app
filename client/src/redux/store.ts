@@ -1,11 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import imagesSlice from '@redux/features/imagesReducer'
 import filtersSlice from '@redux/features/filtersReducer'
 import loginSlice from '@redux/features/loginSlice'
 
 export const store = configureStore({
   reducer: {
-    images: imagesSlice,
     filters: filtersSlice,
     login: loginSlice
   }

@@ -3,17 +3,16 @@ import { api } from './api'
 import { API_V1_URL } from '@app/constants/env'
 
 interface FetchImagesType {
-  page: number | string
-  limit: number | string
-  [x: string]: string | number
+  pageParam: number | string
+  filters?: Record<string, any>
 }
 
-export const fetchImages = async ({ page, limit = 10, ...params }: FetchImagesType) => {
+export const fetchImages = async ({ pageParam = 1, filters = {} }: FetchImagesType) => {
   const url = new URL(`${API_V1_URL}/images`)
-  url.searchParams.append('page', `${page}`)
-  url.searchParams.append('limit', `${limit}`)
+  url.searchParams.append('page', `${pageParam}`)
+  url.searchParams.append('limit', '15')
 
-  Object.entries(params).forEach(([key, value]) => {
+  Object.entries(filters).forEach(([key, value]) => {
     url.searchParams.append(key, `${value}`)
   })
 
