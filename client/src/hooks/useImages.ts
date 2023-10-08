@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
 import { fetchImages } from '@app/services/images'
 import { useAppDispatch, useAppSelector } from '@redux/hooks'
-import { type FiltersState, nextFilterPage, setFilters, resetFilters } from '@redux/features/filtersReducer'
+import { type FiltersState, setFilters } from '@redux/features/filtersReducer'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 export const useImages = () => {
@@ -25,8 +24,6 @@ export const useImages = () => {
   const modifyFilters = (newFilter: Partial<FiltersState>) => {
     dispatch(setFilters(newFilter))
   }
-
-  console.log({ ...filters })
 
   return {
     images: data?.pages ?? [],
