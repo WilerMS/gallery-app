@@ -1,7 +1,7 @@
 import { DeleteIcon } from '@app/icons'
 import { type Image as ImageType } from '@app/types'
 import { Image } from '@nextui-org/react'
-import { type LegacyRef, type FC } from 'react'
+import { type FC } from 'react'
 
 interface Props extends ImageType {
 }
