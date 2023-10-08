@@ -1,5 +1,5 @@
 import Figure from '@app/components/Figure'
-import QuickAddMenuButton from '@app/components/QuickAddMenuButton'
+import FloatingActionButton from '@app/components/FloatingActionButton'
 import { useImages } from '@app/hooks/useImages'
 import cn from 'classnames'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -27,7 +27,7 @@ export default function Home () {
         ))}
       </InfiniteScroll>
 
-      <QuickAddMenuButton />
+      <FloatingActionButton />
 
     </main>
   )
