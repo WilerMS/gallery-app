@@ -4,7 +4,7 @@ import {
   Route,
   Routes
 } from 'react-router-dom'
-import { Header } from '@components/header'
+import { Header } from '@app/features/header'
 
 const Home = lazy(() => import('@pages/Home'))
 const Explore = lazy(() => import('@pages/Explore'))

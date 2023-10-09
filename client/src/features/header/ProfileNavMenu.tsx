@@ -1,6 +1,6 @@
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, NavbarContent } from '@nextui-org/react'
 import { Link } from 'react-router-dom'
-import DarkModeSwitch from '../DarkModeSwitch'
+import DarkModeSwitch from '../../components/DarkModeSwitch'
 import { useTheme } from 'next-themes'
 
 const ProfileNavMenu = () => {
