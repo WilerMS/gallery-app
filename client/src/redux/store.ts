@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import filtersSlice from '@redux/features/filtersReducer'
-import loginSlice from '@redux/features/loginSlice'
+import { filtersSlice, loginSlice } from '@redux/features'
 
 export const store = configureStore({
   reducer: {
