@@ -10,7 +10,7 @@ export interface FiltersState {
 const initialState: FiltersState = {
   q: '',
   page: 1,
-  limit: 20
+  limit: 15
 }
 
 export const filtersSlice = createSlice({
