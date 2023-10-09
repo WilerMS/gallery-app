@@ -1,10 +1,12 @@
 import { type FC } from 'react'
 
-interface IconProps {
+export interface IconProps {
   width?: number | string
   height?: number | string
   color?: `#${string}`
 }
+
+export type Icon = FC<IconProps>
 
 export const MoonIcon: FC<IconProps> = ({ height = '1em', width = '1em', ...props }) => (
   <svg
