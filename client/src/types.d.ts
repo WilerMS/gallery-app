@@ -24,3 +24,5 @@ export interface Id {
 declare interface User {
   x: any
 }
+
+export type Children = JSX.Element | JSX.Element[] | string | string[]
