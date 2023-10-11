@@ -1,27 +1,18 @@
-import { AddIcon, AddImageIcon, AddItemIcon, UploadImageIcon } from '@app/icons'
-import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
-import cn from 'classnames'
+import { AddImageIcon, UploadImageIcon } from '@app/icons'
+import { Dropdown, DropdownItem, DropdownMenu } from '@nextui-org/react'
 import { useTheme } from 'next-themes'
 import { type FC } from 'react'
+import { Fab } from '@components/lib'
 
 type Props = Record<string, any>
 
-const FloatingActionButton: FC<Props> = () => {
+const FloatingActionDropdown: FC<Props> = () => {
   const { theme } = useTheme()
 
   return (
     <div className='fixed bottom-6 right-6'>
       <Dropdown>
-        <DropdownTrigger
-          className={cn(
-            'cursor-pointer h-16 w-16 rounded-full center shadow-2xl bg-white',
-            'dark:bg-slate-800'
-          )}
-        >
-          <div>
-            <AddItemIcon width={28} height={28} color={theme === 'dark' ? '#fff' : '#1C274C'} />
-          </div>
-        </DropdownTrigger>
+        <Fab />
         <DropdownMenu aria-label="Profile Actions" variant="flat">
           <DropdownItem
             key="new-image"
@@ -50,7 +41,7 @@ const FloatingActionButton: FC<Props> = () => {
             Upload Image
           </DropdownItem>
           <DropdownItem
-            key="upload-image"
+            key="generate-image"
             description="Generate an image with AI"
             startContent={<h1 className='pl-[5px] text-2xl'>AI</h1>}
           >
@@ -62,4 +53,4 @@ const FloatingActionButton: FC<Props> = () => {
   )
 }
 
-export default FloatingActionButton
+export default FloatingActionDropdown
